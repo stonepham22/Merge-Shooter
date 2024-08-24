@@ -22,11 +22,13 @@ public class MoveObjectWithDOTween : MonoBehaviour
 
     void OnMoveComplete()
     {
-        transform.gameObject.SetActive(false);
+        // Deactivate the object when the movement is complete.
+        gameObject.SetActive(false);        
     }
 
-    void Start()
+    void OnEnable()
     {
         Move(new Vector3(transform.position.x, 6, 0), 2);
     }
+
 }
