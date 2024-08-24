@@ -14,5 +14,6 @@ public class GunShooting : MonoBehaviour
     {
         Product bullet = spawner.Spawn(ProductType.Bullet, 1);
         bullet.transform.position = transform.position;
+        bullet.gameObject.SetActive(true);
     }
 }

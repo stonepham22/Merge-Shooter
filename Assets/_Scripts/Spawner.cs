@@ -39,7 +39,6 @@ public class Spawner : LoboBehaviour
     public Product Spawn(ProductType type, int id)
     {
         Product newProduct = _factories[type].GetProduct(id);
-        newProduct.gameObject.SetActive(true);
         return newProduct;
     }
 }
