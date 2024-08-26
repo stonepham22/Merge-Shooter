@@ -19,7 +19,7 @@ public class Drag2D : MonoBehaviour
 
     private Vector3 GetMouseWorldPos()
     {
-        Vector3 mousePoint = Input.mousePosition;
+        var mousePoint = Input.mousePosition;
         mousePoint.z = 10f; // Distance from the camera
         return Camera.main.ScreenToWorldPoint(mousePoint);
     }
@@ -27,17 +27,41 @@ public class Drag2D : MonoBehaviour
     void OnMouseUp()
     {
         float minDistance = float.MaxValue;
-        Vector3 closestSnapPoint = Vector3.zero;
+        Transform closestSnapPoint = null;
+
+        // Find the closest snap point and closest transform
         foreach (Transform snapPoint in SnapPoint)
         {
+            // Calculate the distance between the object and the snap point
             float distance = Vector3.Distance(transform.position, snapPoint.position);
+
+            // If the distance is less than the minimum distance, set the minimum distance to the distance
             if (distance < minDistance)
             {
                 minDistance = distance;
-                closestSnapPoint = snapPoint.position;
+                closestSnapPoint = snapPoint;
             }
         }
-        transform.position = closestSnapPoint;
+
+        // If the closest snap point has no children, snap the object to the snap point
+        if (closestSnapPoint.childCount == 0)
+        {
+            // Set the object's position to the closest snap point
+            transform.position = closestSnapPoint.position;
+
+            // Set the object's parent to the snap point
+            transform.SetParent(closestSnapPoint);
+        }
+
+        // If the closest snap point has children, swap the object with the gun in the snap point
+        else
+        {
+            var gunInClosest = closestSnapPoint.GetChild(0);
+            gunInClosest.SetParent(transform.parent);
+            gunInClosest.localPosition = Vector3.zero;
+            transform.SetParent(closestSnapPoint);
+            transform.localPosition = Vector3.zero;
+        }
     }
 
 }
