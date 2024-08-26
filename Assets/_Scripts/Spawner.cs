@@ -13,7 +13,6 @@ public class Spawner : LoboBehaviour
     protected override void LoadComponents()
     {
         LoadFactories();
-        ShowFactories();
     }
 
     void LoadFactories()
@@ -21,13 +20,6 @@ public class Spawner : LoboBehaviour
         foreach (Factory factory in GetComponentsInChildren<Factory>())
         {
             _factories.TryAdd(factory.Type, factory);
-        }
-    }
-    void ShowFactories()
-    {
-        foreach (var factory in _factories.Values)
-        {
-            Debug.Log(factory.Type);
         }
     }
 
