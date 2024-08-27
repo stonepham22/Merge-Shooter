@@ -7,6 +7,10 @@ using UnityEngine;
 /// </summary>
 public class MoveObjectWithDOTween : MonoBehaviour
 {
+    [SerializeField] private float _targetPositionY;
+    [SerializeField] private float _duration;
+    private Tween _moveTween;
+    
     /// <summary>
     /// Move the object to targetPosition over the duration.
     /// </summary>
@@ -15,20 +19,23 @@ public class MoveObjectWithDOTween : MonoBehaviour
     public void Move(Vector3 targetPosition, float duration)
     {
         // Apply easing InOutQuad to make the movement smoother.
-        transform.DOMove(targetPosition, duration)
-                 .SetEase(Ease.InOutQuad)
-                 .OnComplete(OnMoveComplete);
-    }
-
-    void OnMoveComplete()
-    {
-        // Deactivate the object when the movement is complete.
-        gameObject.SetActive(false);        
+        _moveTween = transform.DOMove(targetPosition, duration)
+                              .SetEase(Ease.InOutQuad)
+                              .OnComplete (() => gameObject.SetActive(false));
     }
 
     void OnEnable()
     {
-        Move(new Vector3(transform.position.x, 6, 0), 2);
+        Move(new Vector3(transform.position.x, _targetPositionY, 0), _duration);
+    }
+
+    void OnDisable()
+    {
+        // Kill the tween if it is still active when the object is disabled.
+        if (_moveTween != null && _moveTween.IsActive())
+        {
+            _moveTween.Kill();
+        }
     }
 
 }

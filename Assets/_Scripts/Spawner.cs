@@ -11,7 +11,7 @@ public class Spawner : LoboBehaviour
     private Dictionary<ProductType, Factory> _factories = new Dictionary<ProductType, Factory>();
     [SerializeField] private Transform _spawnPoint;
     [SerializeField] private float _spawnRate = 5;
-    [SerializeField] private float _duration = 10;
+
     protected override void LoadComponents()
     {
         LoadFactories();
@@ -43,9 +43,8 @@ public class Spawner : LoboBehaviour
     void SpawnMonster()
     {
         Product monster = Spawn(ProductType.Monster, 1);
-        monster.transform.position = GetRamdomPosition();
+        monster.transform.localPosition = GetRamdomPosition();
         monster.gameObject.SetActive(true);
-        monster.transform.DOMove(new Vector3(monster.transform.position.x, -6, 0), _duration);//.OnComplete(() => monster.gameObject.SetActive(false));
     }
 
     Vector3 GetRamdomPosition()
