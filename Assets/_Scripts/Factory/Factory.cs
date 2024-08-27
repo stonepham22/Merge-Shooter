@@ -37,8 +37,7 @@ public class Factory : LoboBehaviour
     
     public Product GetProduct(int id)
     {
-        Product newProduct = ObjectPooler.DequeueObject($"{Type}{id}");
-        if (newProduct == null) { newProduct = prefabs[id].Clone(); }
+        Product newProduct = ObjectPooler.DequeueObject(prefabs[id]);
         newProduct.transform.SetParent(_holder);
         return newProduct;
     }

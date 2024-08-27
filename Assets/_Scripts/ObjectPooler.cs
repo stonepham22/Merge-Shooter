@@ -14,20 +14,16 @@ public static class ObjectPooler
     /// <param name="item"></param>
     /// <param name="name"></param>
     
-    // public static void EnqueueObject<T>(T item, string name) where T : Product
-    public static void EnqueueObject(Product item, string name)
+    // public static void EnqueueObject(Product item, string name)
+    public static void EnqueueObject(Product item)
     {
-        // If the object is not active, return.
-        // if (!item.gameObject.activeSelf) { return; }
+        string name = $"{item.Type}{item.Id}";
 
         // If the pool does not contain the object, add it.
         if (!_poolDic.ContainsKey(name)) { _poolDic.Add(name, new Queue<Product>()); }
         
         // Add the object to the pool.
         _poolDic[name].Enqueue(item);
-        
-        // Deactivate the object.
-        // item.gameObject.SetActive(false);
     }
     
     /// <summary>
@@ -37,20 +33,18 @@ public static class ObjectPooler
     /// <param name="item"></param>
     /// <param name="name"></param>
     /// <returns></returns>
-    
-    // public static T DequeueObject<T>(T item, string name) where T : Product
-    public static Product DequeueObject(string name) 
+    public static Product DequeueObject(Product item) 
     {
-        
+        string name = $"{item.Type}{item.Id}";
         // If the pool does not contain the object, add it.
         if (!_poolDic.ContainsKey(name)) { _poolDic.Add(name, new Queue<Product>()); }
 
         // If the pool contains the object, return it.
-        if (_poolDic[name].TryDequeue(out Product item) && !item.gameObject.activeSelf) 
-            { return item; }
+        if (_poolDic[name].TryDequeue(out Product itemPool) && !itemPool.gameObject.activeSelf) 
+            { return itemPool; }
 
-        // If the pool does not contain the object, return null.
-        return null;
+        // If the pool does not contain the object, create a new one.
+        return item.Clone();
     }
 
 }

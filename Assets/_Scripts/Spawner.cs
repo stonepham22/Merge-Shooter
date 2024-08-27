@@ -9,12 +9,13 @@ using UnityEngine;
 public class Spawner : LoboBehaviour
 {
     private Dictionary<ProductType, Factory> _factories = new Dictionary<ProductType, Factory>();
-
+    [SerializeField] private Transform _spawnPoint;
+    [SerializeField] private float _spawnRate = 5;
+    [SerializeField] private float _duration = 10;
     protected override void LoadComponents()
     {
         LoadFactories();
     }
-
     void LoadFactories()
     {
         foreach (Factory factory in GetComponentsInChildren<Factory>())
@@ -32,5 +33,24 @@ public class Spawner : LoboBehaviour
     {
         Product newProduct = _factories[type].GetProduct(id);
         return newProduct;
+    }
+
+    void Start()
+    {
+        InvokeRepeating(nameof(SpawnMonster), 0, _spawnRate);
+    }
+
+    void SpawnMonster()
+    {
+        Product monster = Spawn(ProductType.Monster, 1);
+        monster.transform.position = GetRamdomPosition();
+        monster.gameObject.SetActive(true);
+        monster.transform.DOMove(new Vector3(monster.transform.position.x, -6, 0), _duration);//.OnComplete(() => monster.gameObject.SetActive(false));
+    }
+
+    Vector3 GetRamdomPosition()
+    {
+        int indexSpawnPoint = Random.Range(0, 6);
+        return _spawnPoint.GetChild(indexSpawnPoint).position;
     }
 }

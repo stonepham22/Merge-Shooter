@@ -8,7 +8,6 @@ public class Product : MonoBehaviour
     public ProductType Type;
     
     /// <summary>
-    /// Creates a clone of the current Product instance.
     /// </summary>
     /// <returns>A new Product instance that is a copy of the current instance.</returns>
 
@@ -19,7 +18,7 @@ public class Product : MonoBehaviour
 
     void OnDisable()
     {
-        ObjectPooler.EnqueueObject(this, $"{Type}{Id}");
+        ObjectPooler.EnqueueObject(this);
     }
 
     
