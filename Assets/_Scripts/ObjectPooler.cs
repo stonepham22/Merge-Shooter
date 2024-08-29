@@ -10,11 +10,7 @@ public static class ObjectPooler
     /// <summary>
     /// Add object to the pool.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="item"></param>
-    /// <param name="name"></param>
     
-    // public static void EnqueueObject(Product item, string name)
     public static void EnqueueObject(Product item)
     {
         string name = $"{item.Type}{item.Id}";
@@ -29,10 +25,6 @@ public static class ObjectPooler
     /// <summary>
     /// Take an object from the pool if available or create a new one.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="item"></param>
-    /// <param name="name"></param>
-    /// <returns></returns>
     public static Product DequeueObject(Product item) 
     {
         string name = $"{item.Type}{item.Id}";

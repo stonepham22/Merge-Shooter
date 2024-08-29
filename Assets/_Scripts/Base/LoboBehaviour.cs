@@ -6,7 +6,6 @@ public abstract class LoboBehaviour : MonoBehaviour
 {
     protected virtual void Reset()
     {
-        // ResetValue();
         LoadComponents();
     }
 
@@ -14,6 +13,6 @@ public abstract class LoboBehaviour : MonoBehaviour
     {
         LoadComponents();
     }
+
     protected abstract void LoadComponents();
-    // protected virtual void ResetValue() { }
 }

@@ -9,8 +9,12 @@ using UnityEngine;
 public class Spawner : LoboBehaviour
 {
     private Dictionary<ProductType, Factory> _factories = new Dictionary<ProductType, Factory>();
-    [SerializeField] private Transform _spawnPoint;
-    [SerializeField] private float _spawnRate = 5;
+
+    [Header("Monster")]
+    [SerializeField] private Transform _monsterSpawnPoint;
+    [SerializeField] private float _monsterSpawnRate = 5;
+    [Header("Gun")]
+    [SerializeField] private Transform _gunSpawnPoint;
 
     protected override void LoadComponents()
     {
@@ -24,6 +28,10 @@ public class Spawner : LoboBehaviour
         }
     }
 
+    void Start()
+    {
+        InvokeRepeating(nameof(SpawnMonster), 0, _monsterSpawnRate);
+    }
     /// <summary>
     /// Take a product from the pool if available or create a new one.
     /// </summary>
@@ -35,10 +43,43 @@ public class Spawner : LoboBehaviour
         return newProduct;
     }
 
-    void Start()
+    public void SpawnGun()
     {
-        InvokeRepeating(nameof(SpawnMonster), 0, _spawnRate);
+        // find empty spawn point
+        Transform spawnPoint = GetGunSpawnPoint();
+        if (spawnPoint != null)
+        {
+            Product gun = Spawn(ProductType.Gun, 1);
+            gun.gameObject.transform.SetParent(spawnPoint);
+            gun.transform.localPosition = Vector3.zero;
+            gun.gameObject.SetActive(true);
+        }
+        else
+        {
+            foreach (Transform child in _gunSpawnPoint)
+            {
+                if(child.childCount == 0) continue;
+                if(!child.gameObject.CompareTag("Lobby")) continue;
+                if(child.GetChild(0).GetComponent<Product>().Id == 1)
+                {
+                    
+                }
+            }
+        }
     }
+
+    Transform GetGunSpawnPoint()
+    {
+        foreach (Transform child in _gunSpawnPoint)
+        {
+            if (child.childCount == 0 && child.gameObject.CompareTag("Lobby"))
+            {
+                return child;
+            }
+        }
+        return null;
+    }
+
 
     void SpawnMonster()
     {
@@ -50,6 +91,7 @@ public class Spawner : LoboBehaviour
     Vector3 GetRamdomPosition()
     {
         int indexSpawnPoint = Random.Range(0, 6);
-        return _spawnPoint.GetChild(indexSpawnPoint).position;
+        return _monsterSpawnPoint.GetChild(indexSpawnPoint).position;
     }
+
 }
