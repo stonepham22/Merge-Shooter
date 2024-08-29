@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Drag2D : MonoBehaviour
+public class GunDragAndDrop : MonoBehaviour
 {
     private Vector3 _offset;
     public Transform SnapPoint;
@@ -17,10 +17,24 @@ public class Drag2D : MonoBehaviour
     }
     void OnMouseUp()
     {
+        Transform closestSnapPoint = GetClosestSnapPoint();
+        SetParent(closestSnapPoint);
+        CheckShootingPoint(closestSnapPoint);
+    }
+    
+    Vector3 GetMouseWorldPos()
+    {
+        var mousePoint = Input.mousePosition;
+        mousePoint.z = 10f; // Distance from the camera
+        return Camera.main.ScreenToWorldPoint(mousePoint);
+    }
+
+    Transform GetClosestSnapPoint()
+    {
         float minDistance = float.MaxValue;
         Transform closestSnapPoint = null;
 
-        // Find the closest snap point and closest transform
+        // Find the closest snap point
         foreach (Transform snapPoint in SnapPoint)
         {
             // Calculate the distance between the object and the snap point
@@ -33,7 +47,10 @@ public class Drag2D : MonoBehaviour
                 closestSnapPoint = snapPoint;
             }
         }
-
+        return closestSnapPoint;
+    }
+    void SetParent(Transform closestSnapPoint)
+    {
         // If the closest snap point has no children, snap the object to the snap point
         if (closestSnapPoint.childCount == 0)
         {
@@ -52,11 +69,12 @@ public class Drag2D : MonoBehaviour
             // Set the object's parent to the closest snap point
             transform.SetParent(closestSnapPoint);
         }
-
         // In both cases, the position must be set to Vector3.zero
         transform.localPosition = Vector3.zero;
-
-        if(closestSnapPoint.CompareTag("ShootingPoint"))
+    }
+    void CheckShootingPoint(Transform closestSnapPoint)
+    {
+        if (closestSnapPoint.CompareTag("ShootingPoint"))
         {
             GetComponent<GunShooting>().IsShootingPoint = true;
             GetComponent<GunAnimation>().Shoot();
@@ -67,13 +85,4 @@ public class Drag2D : MonoBehaviour
             GetComponent<GunAnimation>().Stop();
         }
     }
-    
-    private Vector3 GetMouseWorldPos()
-    {
-        var mousePoint = Input.mousePosition;
-        mousePoint.z = 10f; // Distance from the camera
-        return Camera.main.ScreenToWorldPoint(mousePoint);
-    }
-
-
 }

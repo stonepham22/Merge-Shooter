@@ -1,58 +1,36 @@
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
 using UnityEngine;
 
-/// <summary>
-/// Contains all types of factories in the scene.
-/// </summary>
-public class Spawner : LoboBehaviour
+public class Spawner : MonoBehaviour
 {
-    private Dictionary<ProductType, Factory> _factories = new Dictionary<ProductType, Factory>();
-
+    [SerializeField] private FactoryManager _factoryManager;
     [Header("Monster")]
     [SerializeField] private Transform _monsterSpawnPoint;
     [SerializeField] private float _monsterSpawnRate = 5;
     [Header("Gun")]
     [SerializeField] private Transform _gunSpawnPoint;
-
-    protected override void LoadComponents()
-    {
-        LoadFactories();
-    }
-    void LoadFactories()
-    {
-        foreach (Factory factory in GetComponentsInChildren<Factory>())
-        {
-            _factories.TryAdd(factory.Type, factory);
-        }
-    }
-
+    
     void Start()
     {
         InvokeRepeating(nameof(SpawnMonster), 0, _monsterSpawnRate);
     }
-    /// <summary>
-    /// Take a product from the pool if available or create a new one.
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="id"></param>
-    public Product Spawn(ProductType type, int id)
-    {
-        Product newProduct = _factories[type].GetProduct(id);
-        return newProduct;
-    }
 
+    void Spawn(GameObject obj, Vector3 position)
+    {
+        obj.transform.localPosition = position;
+        obj.SetActive(true);
+    }
+    
     public void SpawnGun()
     {
         // find empty spawn point
         Transform spawnPoint = GetGunSpawnPoint();
         if (spawnPoint != null)
         {
-            Product gun = Spawn(ProductType.Gun, 1);
+            Product gun = _factoryManager.GetProduct(ProductType.Gun, 1);
             gun.gameObject.transform.SetParent(spawnPoint);
-            gun.transform.localPosition = Vector3.zero;
-            gun.gameObject.SetActive(true);
+            Spawn(gun.gameObject, Vector3.zero);
         }
         else
         {
@@ -80,12 +58,10 @@ public class Spawner : LoboBehaviour
         return null;
     }
 
-
     void SpawnMonster()
     {
-        Product monster = Spawn(ProductType.Monster, 1);
-        monster.transform.localPosition = GetRamdomPosition();
-        monster.gameObject.SetActive(true);
+        Product monster = _factoryManager.GetProduct(ProductType.Monster, 1);
+        Spawn(monster.gameObject, GetRamdomPosition());
     }
 
     Vector3 GetRamdomPosition()
