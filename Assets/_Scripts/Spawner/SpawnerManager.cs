@@ -32,13 +32,12 @@ public class SpawnerManager : LoboBehaviour
         foreach (BaseSpawner spawner in spawners)
         {
             _spawners.Add(spawner.ProductType, spawner);
-            Debug.Log($"Spawner {spawner.ProductType} loaded");
         }
     }
 
     void Start()
     {
-        InvokeRepeating(nameof(SpawnMonster), 0, _monsterSpawnRate);
+        InvokeRepeating(nameof(SpawnMonster), 1, _monsterSpawnRate);
     }
 
     void SpawnMonster()

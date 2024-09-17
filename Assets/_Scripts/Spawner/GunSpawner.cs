@@ -31,7 +31,7 @@ public class GunSpawner : BaseSpawner
     {
         for (int i = 0; i < spawnPoint.childCount; i++)
         {
-            Vector3 worldPosition = UIToWorldPosition.ConvertUIToWorldPosition(spawnPoint.GetChild(i) as RectTransform);
+            Vector3 worldPosition = MyCalculator.ConvertUIToWorldPosition(spawnPoint.GetChild(i) as RectTransform);
             spawnPositions[i] = worldPosition;
         }
     }

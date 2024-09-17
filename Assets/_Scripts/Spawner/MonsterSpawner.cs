@@ -9,7 +9,7 @@ public class MonsterSpawner : BaseSpawner
     public override void Spawn(int id, FactoryManager factoryManager)
     {
         Product monster = factoryManager.GetProduct(ProductType.Monster, id);
-        monster.transform.localPosition = GetRamdomPosition();
+        monster.transform.position = GetRamdomPosition();
         monster.gameObject.SetActive(true);
     }
     private Vector3 GetRamdomPosition()
@@ -29,8 +29,8 @@ public class MonsterSpawner : BaseSpawner
     {
         for (int i = 0; i < spawnPoint.childCount; i++)
         {
-            Vector3 worldPosition = UIToWorldPosition.ConvertUIToWorldPosition(spawnPoint.GetChild(i) as RectTransform);
-            worldPosition = DistanceToTopOfCamera.GetPositionOverScreen(worldPosition, _offset);
+            Vector3 worldPosition = MyCalculator.ConvertUIToWorldPosition(spawnPoint.GetChild(i) as RectTransform);
+            worldPosition = MyCalculator.GetPositionOverScreen(worldPosition, _offset);
             spawnPositions[i] = worldPosition;
         }
     }
