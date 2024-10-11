@@ -28,5 +28,5 @@ public abstract class BaseSpawner : LoboBehaviour
         spawnPositions = new Vector3[spawnPoint.childCount];
     }
     protected abstract void LoadSpawnPositions();
-    public abstract void Spawn(int id, FactoryManager factoryManager);
+    public abstract void Spawn(ProductType type, int id);
 }

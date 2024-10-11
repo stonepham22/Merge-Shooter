@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GunShooting : MonoBehaviour
 {
-    public FactoryManager spawner;
+    // public FactoryManager spawner;
     public bool IsShootingPoint = false;
     [SerializeField] private float _timer;
     [SerializeField] private float _shootInterval = 0.5f;
@@ -15,13 +15,13 @@ public class GunShooting : MonoBehaviour
         Shoot();
     }
 
-    void Shoot()
+    async void Shoot()
     {
         // If the gun is not shooting, return
         if (!CanShoot()) return;
 
         // Spawn a bullet and set its position to the gun's position
-        Product bullet = spawner.GetProduct(ProductType.Bullet, 1);
+        Product bullet = await FactoryManager.GetProduct(ProductType.Bullet, 1);
         bullet.transform.position = transform.position + _offset;
         bullet.gameObject.SetActive(true);
     }

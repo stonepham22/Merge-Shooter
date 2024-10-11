@@ -1,18 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
-public class Factory : LoboBehaviour
+public abstract class Factory : LoboBehaviour
 {
-    public ProductType Type;
     [SerializeField] private Transform _prefabParent;
     [SerializeField] private Transform _holder;
-    private Dictionary<int, Product> prefabs = new Dictionary<int, Product>();
+    protected Dictionary<int, Product> prefabs = new Dictionary<int, Product>();
 
     protected override void LoadComponents()
     {
         LoadPrefavParent();
-        LoadPrefab();
         LoadHolder();
     }
     void LoadPrefavParent()
@@ -25,21 +23,53 @@ public class Factory : LoboBehaviour
         if (_holder != null) return;
         _holder = transform.Find("Holder");
     }
-    void LoadPrefab()
+
+    public abstract ProductType GetProductType();
+
+    public async Task<Product> GetProduct(int id)
     {
-        foreach (Transform transform in _prefabParent)
+        // Step 1: Check if the product already exists in the prefabs dictionary
+        Product product = GetProductFromDictionary(id);
+
+        if (product != null)
         {
-            Product product = transform.GetComponent<Product>();
-            prefabs.TryAdd(product.Id, product);
-            product.gameObject.SetActive(false);
+            // If the product exists, return an instance of that product
+            return Instantiate(product);
         }
-    }
-    
-    public Product GetProduct(int id)
-    {
-        Product newProduct = ObjectPooler.DequeueObject(prefabs[id]);
-        newProduct.transform.SetParent(_holder);
-        return newProduct;
+
+        // Step 2: If the product does not exist, create a new product
+        product = await CreateNewProduct(id);
+
+        // Set up the new product
+        SetupProduct(product, id);
+
+        // Step 3: Return an instance of the new product
+        return Instantiate(product);
     }
 
+    protected virtual Product GetProductFromDictionary(int id)
+    {
+        if (prefabs.TryGetValue(id, out Product product))
+        {
+            return product;
+        }
+        return null;
+    }
+
+    protected virtual async Task<Product> CreateNewProduct(int id)
+    {
+        string name = GetProductType().ToString() + "_" + id;
+        GameObject prefab = await MyAddressables.LoadAssetAsync(name);
+        Product product = prefab.GetComponent<Product>();
+        product.gameObject.GetComponent<ScaleWithScreenSize>().Scale();
+        return product;
+    }
+
+    protected virtual void SetupProduct(Product product, int id)
+    {
+        if (product == null) return;
+        prefabs[id] = product;
+        product.transform.SetParent(_holder);
+        product.gameObject.SetActive(false);
+    }
 }

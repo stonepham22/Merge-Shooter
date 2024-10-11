@@ -6,11 +6,11 @@ public class MonsterSpawner : BaseSpawner
 {
     private float _offset = 1f; // Offset from the top of the screen
 
-    public override void Spawn(int id, FactoryManager factoryManager)
+    public override void Spawn(ProductType type, int id)
     {
-        Product monster = factoryManager.GetProduct(ProductType.Monster, id);
-        monster.transform.position = GetRamdomPosition();
-        monster.gameObject.SetActive(true);
+        // Product monster = FactoryManager.GetProduct(type, id);
+        // monster.transform.position = GetRamdomPosition();
+        // monster.gameObject.SetActive(true);
     }
     private Vector3 GetRamdomPosition()
     {
@@ -22,7 +22,7 @@ public class MonsterSpawner : BaseSpawner
     }
     protected override void LoadSpawnPoint()
     {
-        if(spawnPoint != null) return;
+        if (spawnPoint != null) return;
         spawnPoint = GameObject.Find("MonsterSpawnPoints").GetComponent<RectTransform>();
     }
     protected override void LoadSpawnPositions()

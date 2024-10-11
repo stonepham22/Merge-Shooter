@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
@@ -8,7 +9,8 @@ using UnityEngine;
 /// </summary>
 public class FactoryManager : LoboBehaviour
 {
-    private Dictionary<ProductType, Factory> _factories = new Dictionary<ProductType, Factory>();
+    private FactoryManager() { }
+    private static Dictionary<ProductType, Factory> _factories = new Dictionary<ProductType, Factory>();
 
     protected override void LoadComponents()
     {
@@ -18,18 +20,18 @@ public class FactoryManager : LoboBehaviour
     {
         foreach (Factory factory in GetComponentsInChildren<Factory>())
         {
-            _factories.TryAdd(factory.Type, factory);
+            _factories.TryAdd(factory.GetProductType(), factory);
         }
     }
-    
+
     /// <summary>
     /// Take a product from the pool if available or create a new one.
     /// </summary>
     /// <param name="type"></param>
     /// <param name="id"></param>
-    public Product GetProduct(ProductType type, int id)
+    public static async Task<Product> GetProduct(ProductType type, int id)
     {
-        Product newProduct = _factories[type].GetProduct(id);
+        Product newProduct = await _factories[type].GetProduct(id);
         return newProduct;
     }
 

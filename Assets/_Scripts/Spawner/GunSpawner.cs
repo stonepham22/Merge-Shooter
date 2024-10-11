@@ -4,16 +4,18 @@ using UnityEngine;
 
 public class GunSpawner : BaseSpawner
 {
-    public override void Spawn(int id, FactoryManager factoryManager)
+    [SerializeField] private Lobby _lobby;
+    public override async void Spawn(ProductType type, int id)
     {
-        Product gun = factoryManager.GetProduct(ProductType.Gun, id);
-        gun.transform.localPosition = GetRamdomPosition();
+        Product gun = await ObjectPooler.DequeueObject(type, id);
+        gun.transform.localPosition = GetLobby().GetEmptyPosition();
         gun.gameObject.SetActive(true);
     }
 
-    private Vector3 GetRamdomPosition()
+    private Lobby GetLobby()
     {
-        return spawnPositions[Random.Range(0, spawnPositions.Length)];
+        if (_lobby == null) _lobby = FindAnyObjectByType<Lobby>(); 
+        return _lobby;
     }
 
     protected override void LoadProductType()
@@ -24,7 +26,7 @@ public class GunSpawner : BaseSpawner
     protected override void LoadSpawnPoint()
     {
         if(spawnPoint != null) return;
-        spawnPoint = GameObject.Find("GunSpawnPoints").GetComponent<RectTransform>();
+        spawnPoint = GameObject.Find("Lobby").GetComponent<RectTransform>();
     }
 
     protected override void LoadSpawnPositions()

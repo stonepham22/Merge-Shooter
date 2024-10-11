@@ -14,7 +14,7 @@ public class ScaleWithScreenSize : MonoBehaviour
         _screenWidth = Screen.width;
     }
 
-    void Start()
+    public void Scale()
     {
         float scaleWith = _screenWidth / Screen.width;
         float scaleHeight = _screenHeight / Screen.height;
