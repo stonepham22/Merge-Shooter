@@ -10,20 +10,6 @@ public class Product : MonoBehaviour
     public ProductType ProductType;
     [SerializeField] private AssetLabelReference obj;
     
-    /// <summary>
-    /// </summary>
-    /// <returns>A new Product instance that is a copy of the current instance.</returns>
-
-    // public Product Clone()
-    // {
-    //     var handle = Addressables.LoadAssetAsync<GameObject>(obj);
-    //     handle.Completed += (AsyncOperationHandle<GameObject> task) =>
-    //     {
-    //         return Instantiate(task.Result);
-    //     };
-    //     return Instantiate(this);
-    // }
-
     void OnDisable()
     {
         // Add to pool

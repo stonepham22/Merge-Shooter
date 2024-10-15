@@ -173,9 +173,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Id: 1
-  Type: 3
+  ProductType: 3
   obj:
-    m_LabelString: 
+    m_LabelString: Gun_01
 --- !u!114 &861636552428915655
 MonoBehaviour:
   m_ObjectHideFlags: 0

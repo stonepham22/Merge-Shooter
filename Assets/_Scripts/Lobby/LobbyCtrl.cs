@@ -17,7 +17,6 @@ public static class LobbyCtrl
         if (_spawnPositions.ContainsKey(position))
         {
             _spawnPositions[position] = false;
-            Debug.Log(_spawnPositions[position]);
         }
     }
 

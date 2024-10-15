@@ -46,6 +46,11 @@ public class GunSpawner : BaseSpawner, IObserver
         }
     }
 
+    /// <summary>
+    /// Notify the observer of the event.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="data"></param>
     public void Notify(EventType type, object data)
     {
         switch (type)

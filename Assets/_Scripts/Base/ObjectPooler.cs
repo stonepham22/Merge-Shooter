@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public static class ObjectPooler
@@ -21,6 +19,7 @@ public static class ObjectPooler
         
         // Add the object to the pool.
         _poolDic[name].Enqueue(item);
+        Debug.Log(_poolDic[name].Count);
     }
     
     /// <summary>
