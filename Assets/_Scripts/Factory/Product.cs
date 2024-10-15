@@ -7,7 +7,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 public class Product : MonoBehaviour
 {
     public int Id;
-    public ProductType Type;
+    public ProductType ProductType;
     [SerializeField] private AssetLabelReference obj;
     
     /// <summary>
@@ -26,7 +26,13 @@ public class Product : MonoBehaviour
 
     void OnDisable()
     {
+        // Add to pool
         ObjectPooler.EnqueueObject(this);
+
+        // Remove to lobby
+        LobbyCtrl.SetEmpty(transform.position);
+
+        Observer.Notify(EventType.NotFullLobby, null);
     }
     
 }

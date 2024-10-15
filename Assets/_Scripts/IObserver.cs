@@ -11,5 +11,5 @@ public interface IObserver
     /// </summary>
     /// <param name="type">The type of event that the subject wants to notify</param>
     /// <param name="data">The data that the subject wants to pass to the event listener objects</param>
-    void Notify(Type type, object data);
+    void Notify(EventType type, object data);
 }

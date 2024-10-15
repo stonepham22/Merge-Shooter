@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class LobbyCtrl 
+public static class LobbyCtrl
 {
     private static Dictionary<Vector3, bool> _spawnPositions = new Dictionary<Vector3, bool>();
 
@@ -11,10 +11,20 @@ public static class LobbyCtrl
         Vector3 worldPosition = MyCalculator.ConvertUIToWorldPosition((RectTransform)rectTransform);
         _spawnPositions.Add(worldPosition, false);
     }
+
+    public static void SetEmpty(Vector3 position)
+    {
+        if (_spawnPositions.ContainsKey(position))
+        {
+            _spawnPositions[position] = false;
+            Debug.Log(_spawnPositions[position]);
+        }
+    }
+
     public static Vector3 GetEmptyPosition()
     {
         // Iterate through all positions in the _spawnPositions
-        foreach(var position in _spawnPositions)
+        foreach (var position in _spawnPositions)
         {
             // If the position is empty, set it to true and return the position
             if (!position.Value)
@@ -25,7 +35,7 @@ public static class LobbyCtrl
             }
         }
 
-        Observer.Notify(Type.FullLobby, null);
+        Observer.Notify(EventType.FullLobby, null);
 
         return Vector3.zero;
     }

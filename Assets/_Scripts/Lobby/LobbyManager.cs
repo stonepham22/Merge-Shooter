@@ -41,7 +41,7 @@ public class LobbyManager : MonoBehaviour
             }
         }
 
-        Observer.Notify(Type.FullLobby, null);
+        Observer.Notify(EventType.FullLobby, null);
 
         return Vector3.zero;
     }

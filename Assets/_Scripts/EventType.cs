@@ -4,7 +4,8 @@ using UnityEngine;
 /// <summary>
 /// Lists the events in the project
 /// </summary>
-public enum Type
+public enum EventType
 {
-    FullLobby
+    FullLobby,
+    NotFullLobby
 }

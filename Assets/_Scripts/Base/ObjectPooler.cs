@@ -14,7 +14,7 @@ public static class ObjectPooler
     /// </summary>
     public static void EnqueueObject(Product item)
     {
-        string name = $"{item.Type}{item.Id}";
+        string name = $"{item.ProductType}{item.Id}";
 
         // If the pool does not contain the object, add it.
         if (!_poolDic.ContainsKey(name)) { _poolDic.Add(name, new Queue<Product>()); }
