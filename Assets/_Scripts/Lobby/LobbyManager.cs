@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// This script manages the lobbies where guns are spawned
 /// </summary>
-public class Lobby : MonoBehaviour
+public class LobbyManager : MonoBehaviour
 {
     private Dictionary<Vector3, bool> _spawnPositions = new Dictionary<Vector3, bool>();
 
@@ -40,7 +40,9 @@ public class Lobby : MonoBehaviour
                 return position.Key;
             }
         }
-        // kích hoạt sự kiện là đã đầy lobby
+
+        Observer.Notify(Type.FullLobby, null);
+
         return Vector3.zero;
     }
 }

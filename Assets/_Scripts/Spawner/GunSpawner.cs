@@ -2,19 +2,37 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GunSpawner : BaseSpawner
+public class GunSpawner : BaseSpawner, IObserver
 {
-    [SerializeField] private Lobby _lobby;
+    [SerializeField] private LobbyManager _lobby;
+    [SerializeField] private bool _isFullLobby;
+
+    private void OnEnable()
+    {
+        Observer.Regist(Type.FullLobby, this);
+    }
+    private void OnDisable()
+    {
+        Observer.Unregist(Type.FullLobby, this);
+    }
+    private void OnDestroy()
+    {
+        Observer.Unregist(Type.FullLobby, this);
+    }
+
     public override async void Spawn(ProductType type, int id)
     {
+        if(_isFullLobby) return;
         Product gun = await ObjectPooler.DequeueObject(type, id);
-        gun.transform.localPosition = GetLobby().GetEmptyPosition();
+        // gun.transform.localPosition = GetLobby().GetEmptyPosition();
+        gun.transform.localPosition = LobbyCtrl.GetEmptyPosition();
+        if(_isFullLobby) return;
         gun.gameObject.SetActive(true);
     }
 
-    private Lobby GetLobby()
+    private LobbyManager GetLobby()
     {
-        if (_lobby == null) _lobby = FindAnyObjectByType<Lobby>(); 
+        if (_lobby == null) _lobby = FindAnyObjectByType<LobbyManager>(); 
         return _lobby;
     }
 
@@ -38,4 +56,8 @@ public class GunSpawner : BaseSpawner
         }
     }
 
+    public void Notify(Type type, object data)
+    {
+        _isFullLobby = true;
+    }
 }
