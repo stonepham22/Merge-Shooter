@@ -19,7 +19,6 @@ public static class ObjectPooler
         
         // Add the object to the pool.
         _poolDic[name].Enqueue(item);
-        Debug.Log(_poolDic[name].Count);
     }
     
     /// <summary>

@@ -12,12 +12,11 @@ GameObject:
   - component: {fileID: 1210763047569194116}
   - component: {fileID: 7426952173284999406}
   - component: {fileID: 5577517701428553917}
-  - component: {fileID: 401383155463353490}
   - component: {fileID: 861636552428915655}
   - component: {fileID: 1396617342791531912}
   - component: {fileID: 4739887220930908407}
-  - component: {fileID: 4962266577661208483}
   - component: {fileID: 2495736935944292284}
+  - component: {fileID: -3690255899876217476}
   m_Layer: 0
   m_Name: Gun_01
   m_TagString: Untagged
@@ -160,22 +159,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &401383155463353490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1151670764899446761}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7777c69abcb2eea43ba0ab41fbd535dd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Id: 1
-  ProductType: 3
-  obj:
-    m_LabelString: Gun_01
 --- !u!114 &861636552428915655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,20 +201,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 0}
---- !u!114 &4962266577661208483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1151670764899446761}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 39b9219e84e6b2b4d93da5114b89146c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _snapPoint: {fileID: 0}
-  _id: 1
 --- !u!114 &2495736935944292284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,6 +216,22 @@ MonoBehaviour:
   _screenWidth: 397
   _screenHeight: 963
   _offset: 0.45
+--- !u!114 &-3690255899876217476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1151670764899446761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51d5dbfd75f2ff249a59ffd30e88ccfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Id: 1
+  ProductType: 3
+  obj:
+    m_LabelString: Gun_01
 --- !u!1 &5859130402320362574
 GameObject:
   m_ObjectHideFlags: 0

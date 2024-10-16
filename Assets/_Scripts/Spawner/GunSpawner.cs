@@ -1,11 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GunSpawner : BaseSpawner, IObserver
 {
     [SerializeField] private bool _isFullLobby;
-    List<EventType> _events = new List<EventType>() { EventType.FullLobby, EventType.NotFullLobby };
+    List<EventType> _events = new List<EventType>()
+        { EventType.FullLobby, EventType.NotFullLobby };
+    [SerializeField] private Dictionary<int, Gun> _guns = new Dictionary<int, Gun>();
 
 
     private void OnEnable()
@@ -24,6 +25,23 @@ public class GunSpawner : BaseSpawner, IObserver
         gun.transform.localPosition = LobbyCtrl.GetEmptyPosition();
         if (_isFullLobby) return;
         gun.gameObject.SetActive(true);
+        CheckMerge(gun);
+    }
+
+    private void CheckMerge(Product gun)
+    {
+        if (_guns.ContainsKey(gun.Id))
+        {
+            // Disable two guns
+            gun.gameObject.SetActive(false);
+            _guns[gun.Id].gameObject.SetActive(false);
+            _guns.Remove(gun.Id);
+            // Spawn a new gun
+        }
+        else
+        {
+            _guns.Add(gun.Id, (Gun)gun);
+        }
     }
 
     protected override void LoadProductType()
