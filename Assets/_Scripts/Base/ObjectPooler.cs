@@ -4,39 +4,43 @@ using UnityEngine;
 
 public static class ObjectPooler
 {
-    private static Dictionary<string, Queue<Product>> _poolDic = new Dictionary<string, Queue<Product>>();
-    public static Dictionary<string, Queue<Product>> PoolDic => _poolDic;
+    private static Dictionary<GameObject, Queue<Product>> _poolDic = new Dictionary<GameObject, Queue<Product>>();
     
     /// <summary>
     /// Add object to the pool.
     /// </summary>
     public static void EnqueueObject(Product item)
     {
-        string name = $"{item.ProductType}{item.Id}";
-
         // If the pool does not contain the object, add it.
-        if (!_poolDic.ContainsKey(name)) { _poolDic.Add(name, new Queue<Product>()); }
+        if (!_poolDic.ContainsKey(item.gameObject)) { _poolDic.Add(item.gameObject, new Queue<Product>()); }
         
         // Add the object to the pool.
-        _poolDic[name].Enqueue(item);
+        _poolDic[item.gameObject].Enqueue(item);
     }
     
     /// <summary>
     /// Take an object from the pool if available or create a new one.
     /// </summary>
-    public static async Task<Product> DequeueObject(ProductType type, int id) 
+    public static async Task<Product> DequeueObject(Product item) 
     {
-        string name = $"{type}{id}";
-        
         // If the pool does not contain the object, add it.
-        if (!_poolDic.ContainsKey(name)) { _poolDic.Add(name, new Queue<Product>()); }
+        if (!_poolDic.ContainsKey(item.gameObject)) { _poolDic.Add(item.gameObject, new Queue<Product>()); }
     
         // If the pool contains the object, return it.
-        if (_poolDic[name].TryDequeue(out Product itemPool) && !itemPool.gameObject.activeSelf) 
+        if (_poolDic[item.gameObject].TryDequeue(out Product itemPool) && !itemPool.gameObject.activeSelf) 
             { return itemPool; }
     
         // If the pool does not contain the object, create a new one.
-        return await FactoryManager.GetProduct(type, id);//item.Clone();
+        return await CreateNewProduct(item);
+    }
+
+    private static async Task<Product> CreateNewProduct(Product item)
+    {
+        string name = item.ProductType.ToString() + "_" + item.Id;
+        GameObject prefab = await MyAddressables.LoadAssetAsync(name);
+        Product product = prefab.GetComponent<Product>();
+        product.gameObject.GetComponent<ScaleWithScreenSize>().Scale();
+        return product;
     }
 
 }

@@ -3,14 +3,13 @@ using UnityEngine.AddressableAssets;
 
 public class Product : MonoBehaviour
 {
-    public int Id;
-    public ProductType ProductType;
-    [SerializeField] private AssetLabelReference obj;
-    
+    public int Id { get; private set; }
+    public ProductType ProductType{ get; private set; }
+
     protected virtual void OnDisable()
     {
         // Add to pool
         ObjectPooler.EnqueueObject(this);
     }
-    
+
 }

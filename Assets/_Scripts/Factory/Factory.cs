@@ -29,22 +29,23 @@ public abstract class Factory : LoboBehaviour
     public async Task<Product> GetProduct(int id)
     {
         // Step 1: Check if the product already exists in the prefabs dictionary
-        Product product = GetProductFromDictionary(id);
+        Product productFromDic = GetProductFromDictionary(id);
 
-        if (product != null)
+        if (productFromDic != null)
         {
+            Product newProduct = await ObjectPooler.DequeueObject(productFromDic);
             // If the product exists, return an instance of that product
-            return Instantiate(product);
+            return Instantiate(productFromDic);
         }
 
         // Step 2: If the product does not exist, create a new product
-        product = await CreateNewProduct(id);
+        productFromDic = await CreateNewProduct(id);
 
         // Set up the new product
-        SetupProduct(product, id);
+        SetupProduct(productFromDic, id);
 
         // Step 3: Return an instance of the new product
-        return Instantiate(product);
+        return Instantiate(productFromDic);
     }
 
     protected virtual Product GetProductFromDictionary(int id)
@@ -56,6 +57,11 @@ public abstract class Factory : LoboBehaviour
         return null;
     }
 
+    /// <summary>
+    /// Load the Prefab using Addressables
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     protected virtual async Task<Product> CreateNewProduct(int id)
     {
         string name = GetProductType().ToString() + "_" + id;

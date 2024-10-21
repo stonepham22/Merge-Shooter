@@ -6,8 +6,12 @@ public class GunSpawner : BaseSpawner, IObserver
     [SerializeField] private bool _isFullLobby;
     List<EventType> _events = new List<EventType>()
         { EventType.FullLobby, EventType.NotFullLobby };
-    [SerializeField] private Dictionary<int, Gun> _guns = new Dictionary<int, Gun>();
+    
+    // Check Merge Gun
+    private Dictionary<int, Gun> _guns = new Dictionary<int, Gun>();
 
+    // Prefab to spawn
+    private Dictionary<int, GameObject> _gunPrefabs = new Dictionary<int, GameObject>();
 
     private void OnEnable()
     {
@@ -21,11 +25,11 @@ public class GunSpawner : BaseSpawner, IObserver
     public override async void Spawn(ProductType type, int id)
     {
         if (_isFullLobby) return;
-        Product gun = await ObjectPooler.DequeueObject(type, id);
-        gun.transform.localPosition = LobbyCtrl.GetEmptyPosition();
+        Product newProduct = await FactoryManager.GetProduct(type,id);
+        newProduct.transform.localPosition = LobbyCtrl.GetEmptyPosition();
         if (_isFullLobby) return;
-        gun.gameObject.SetActive(true);
-        CheckMerge(gun);
+        newProduct.gameObject.SetActive(true);
+        // CheckMerge(newProduct);
     }
 
     private void CheckMerge(Product gun)
