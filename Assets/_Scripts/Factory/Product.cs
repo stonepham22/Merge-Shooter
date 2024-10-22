@@ -1,15 +1,18 @@
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 public class Product : MonoBehaviour
 {
-    public int Id { get; private set; }
-    public ProductType ProductType{ get; private set; }
+    [SerializeField] protected int id;
+    public int Id => id;
+    [SerializeField] protected ProductType productType;
+    public ProductType ProductType => productType; 
 
     protected virtual void OnDisable()
     {
         // Add to pool
-        ObjectPooler.EnqueueObject(this);
+        Product product = FactoryManager.GetObjKey(productType, id);
+        Debug.Log(product.gameObject.GetInstanceID());
+        ObjectPooler.EnqueueObject(product, this);
     }
 
 }

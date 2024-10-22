@@ -9,13 +9,15 @@ public static class ObjectPooler
     /// <summary>
     /// Add object to the pool.
     /// </summary>
-    public static void EnqueueObject(Product item)
+    public static void EnqueueObject(Product itemKey, Product itemAdd)
     {
-        // If the pool does not contain the object, add it.
-        if (!_poolDic.ContainsKey(item.gameObject)) { _poolDic.Add(item.gameObject, new Queue<Product>()); }
         
+        // If the pool does not contain the object, add it.
+        if (!_poolDic.ContainsKey(itemKey.gameObject)) { _poolDic.Add(itemKey.gameObject, new Queue<Product>()); }
+        Debug.Log($"Adding {_poolDic[itemKey.gameObject].Count}");
         // Add the object to the pool.
-        _poolDic[item.gameObject].Enqueue(item);
+        _poolDic[itemKey.gameObject].Enqueue(itemAdd);
+        Debug.Log($"Added! {_poolDic[itemKey.gameObject].Count}");
     }
     
     /// <summary>
@@ -29,7 +31,8 @@ public static class ObjectPooler
         // If the pool contains the object, return it.
         if (_poolDic[item.gameObject].TryDequeue(out Product itemPool) && !itemPool.gameObject.activeSelf) 
             { return itemPool; }
-    
+        Debug.Log($"no object from pool: {item.gameObject.GetInstanceID()}");
+        
         // If the pool does not contain the object, create a new one.
         return await CreateNewProduct(item);
     }

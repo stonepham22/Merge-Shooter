@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DG.Tweening;
 using UnityEngine;
 
 /// <summary>
@@ -33,6 +31,11 @@ public class FactoryManager : LoboBehaviour
     {
         Product newProduct = await _factories[type].GetProduct(id);
         return newProduct;
+    }
+
+    public static Product GetObjKey(ProductType type, int id)
+    {
+        return _factories[type].GetObjKey(id);
     }
 
 }

@@ -35,9 +35,9 @@ public abstract class Factory : LoboBehaviour
         {
             Product newProduct = await ObjectPooler.DequeueObject(productFromDic);
             // If the product exists, return an instance of that product
-            return Instantiate(productFromDic);
+            return newProduct;//Instantiate(productFromDic);
         }
-
+        Debug.Log("no object from dic");
         // Step 2: If the product does not exist, create a new product
         productFromDic = await CreateNewProduct(id);
 
@@ -77,5 +77,10 @@ public abstract class Factory : LoboBehaviour
         prefabs[id] = product;
         product.transform.SetParent(_holder);
         product.gameObject.SetActive(false);
+    }
+
+    public virtual Product GetObjKey(int id)
+    {
+        return prefabs[id];
     }
 }
